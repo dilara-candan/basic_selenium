@@ -44,4 +44,3 @@ class TestCheckLcw(unittest.TestCase):
 
     def tearDown(self):
         self.driver.quit()
-        

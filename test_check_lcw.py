@@ -1,4 +1,3 @@
-import time
 import unittest
 
 from selenium.webdriver.common.by import By
@@ -15,11 +14,12 @@ class TestCheckLcw(unittest.TestCase):
     ADD_TO_CART = (By.CLASS_NAME, 'add-to-cart-container')
     CART_PAGE = (By.ID, 'shopping-cart')
     CART_PAGE_CONTROL = (By.TAG_NAME, 'h1')
+    CART_COUNT = (By.CSS_SELECTOR, '.badge-circle:last-child')
     RETURN_HOMEPAGE = (By.CSS_SELECTOR, '.header__middle__left .main-header-logo')
 
-
     base_url = 'https://www.lcwaikiki.com/tr-TR/TR'
-    control_message = 'Kozmetik Aksesuar Markaları'
+    control_message = 'Seçili Ürünlerde Sepette İndirim Kozmetik'
+    cart_count_control = '1'
     cart_page_control_message = 'SİPARİŞ ÖZETİ'
 
     def setUp(self):
@@ -29,14 +29,14 @@ class TestCheckLcw(unittest.TestCase):
         self.driver.implicitly_wait(10)
 
     def test_check_lcw(self):
+        self.base_url == self.driver.current_url
         self.driver.find_element(*self.CATEGORY_1).click()
-        time.sleep(2)
         self.driver.find_element(*self.CATEGORY_2).click()
         self.assertEqual(self.control_message, self.driver.find_element(*self.CATEGORY_PAGE_CONTROL).text)
-        self.driver.find_elements(*self.PRODUCT_PAGE)[0].click()
+        self.driver.find_elements(*self.PRODUCT_PAGE)[1].click()
         self.assertTrue(self.driver.find_element(*self.PRODUCT_PAGE_CONTROL))
         self.driver.find_element(*self.ADD_TO_CART).click()
-        time.sleep(3)
+        self.assertIn(self.cart_count_control, self.driver.find_element(*self.CART_COUNT).text)
         self.driver.find_element(*self.CART_PAGE).click()
         self.assertEqual(self.cart_page_control_message, self.driver.find_element(*self.CART_PAGE_CONTROL).text)
         self.driver.find_element(*self.RETURN_HOMEPAGE).click()
